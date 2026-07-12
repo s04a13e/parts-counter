@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌟値段出し🌟</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>💎 パーツカウンター</title>
 
 <style>
+
 body{
     margin:0;
     padding:20px;
     background:#f7f4ff;
     font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-
-    touch-action: manipulation;
-    -webkit-user-select: none;
-    user-select: none;
+    touch-action:manipulation;
+    -webkit-user-select:none;
+    user-select:none;
 }
 
 h1{
     text-align:center;
     color:#7a4cff;
+    margin-bottom:20px;
 }
 
 .item{
@@ -33,8 +38,20 @@ h1{
     box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
 
+.item.screenshot{
+    padding:8px 15px;
+    margin-bottom:4px;
+}
+
 .name{
     font-size:20px;
+    font-weight:bold;
+}
+
+.count{
+    width:45px;
+    text-align:center;
+    font-size:24px;
     font-weight:bold;
 }
 
@@ -49,232 +66,49 @@ button{
     height:48px;
     border:none;
     border-radius:50%;
-    font-size:26px;
     background:#7a4cff;
     color:white;
-
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
+    font-size:26px;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+    -webkit-touch-callout:none;
 }
 
 button:active{
     transform:scale(.95);
 }
 
-.count{
-    width:35px;
-    text-align:center;
-    font-size:24px;
-    font-weight:bold;
-}
-
-.reset{
+.bottomButton{
     width:100%;
     height:55px;
-    margin-top:20px;
     border-radius:16px;
+    margin-top:15px;
     font-size:20px;
+}
+
+.screenshotBtn{
+    background:#4f8cff;
+}
+
+.resetBtn{
     background:#ff5b8a;
 }
-</style>
+    </style>
 
 </head>
+
 <body>
 
 <h1>値段出し</h1>
 
 <div id="list"></div>
 
-<button class="reset" onclick="toggleScreenshot()">
+<button class="bottomButton screenshotBtn" onclick="toggleScreenshot()">
 スクショ
 </button>
 
-<button class="reset" onclick="resetAll()">
-
-
-リセット
-</button>
-    
-<script>
-
-const items=[
-"10円",
-"20円",
-"30円",
-"40円",
-"60円",
-"80円",
-"120円",
-"180円",
-"250円",
-"300円",
-"500円",
-"700円",
-"900円",
-"1200円",
-"マンテル120",
-"マンテル180",
-"金具50",
-"金具80",
-"金具120"
-];
-
-let counts={};
-    let screenshotMode = false;
-
-items.forEach(item=>{
-    counts[item]=0;
-});
-
-const list=document.getElementById("list");
-
-function draw(){
-
-    list.innerHTML="";
-
-    items.forEach(item=>{
-
-        const div=document.createElement("div");
-        div.className="item";
-
-        if(screenshotMode){
-
-    if(counts[item]==0) return;
-
-    div.innerHTML=`
-        <div class="name">${item}</div>
-        <div class="count">${counts[item]}</div>
-    `;
-
-}else{
-
-    div.innerHTML=`
-        <div class="name">${item}</div>
-
-        <div class="controls">
-
-            <button onclick="minus('${item}')">−</button>
-
-            <div class="count">${counts[item]}</div>
-
-            <button onclick="plus('${item}')">＋</button>
-
-        </div>
-    `;
-
-}
-    
-
-        list.appendChild(div);
-
-    });
-
-}
-
-function plus(item){
-
-    counts[item]++;
-
-    save();
-
-    draw();
-
-}
-function minus(item){
-
-    if(counts[item]>0){
-
-        counts[item]--;
-
-        save();
-
-        draw();
-
-    }
-
-}
-
-function save(){
-
-    localStorage.setItem(
-        "partsCounter",
-        JSON.stringify(counts)
-    );
-
-}
-
-function load(){
-
-    const data=localStorage.getItem("partsCounter");
-
-    if(data){
-
-        counts=JSON.parse(data);
-
-    }
-
-}
-
-function resetAll(){
-
-    if(confirm("すべてリセットしますか？")){
-
-        items.forEach(item=>{
-
-            counts[item]=0;
-
-        });
-
-        save();
-
-        draw();
-
-    }
-
-}
-
-function toggleScreenshot(){
-
-    screenshotMode = !screenshotMode;
-
-    draw();
-
-}
-
-load();
-
-draw();
-
-    }
-
-}
-load();
-
-draw();
-
-</script>
-
-</body>
-</html>
-</style>
-
-</head>
-
-<body>
-
-<h1>💎 パーツカウンター</h1>
-
-<div id="list"></div>
-
-<button class="bottomButton screenshotBtn" onclick="toggleScreenshot()">
-📸 スクショモード
-</button>
-
 <button class="bottomButton resetBtn" onclick="resetAll()">
-🗑️ リセット
+リセット
 </button>
 
 <script>
@@ -394,8 +228,7 @@ function load(){
     }
 
 }
-
-function resetAll(){
+    function resetAll(){
 
     if(confirm("すべてリセットしますか？")){
 
@@ -419,7 +252,7 @@ function toggleScreenshot(){
     if(screenshotMode){
         btn.textContent="↩️ 通常モード";
     }else{
-        btn.textContent="📸 スクショモード";
+        btn.textContent="スクショ";
     }
 
     draw();
