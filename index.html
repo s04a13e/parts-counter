@@ -84,7 +84,7 @@ button:active{
 </head>
 <body>
 
-<h1>💎 パーツカウンター</h1>
+<h1>値段出し</h1>
 
 <div id="list"></div>
 
@@ -115,6 +115,7 @@ const items=[
 ];
 
 let counts={};
+    let screenshotMode = false;
 
 items.forEach(item=>{
     counts[item]=0;
@@ -131,19 +132,33 @@ function draw(){
         const div=document.createElement("div");
         div.className="item";
 
-        div.innerHTML=`
+        if(screenshotMode){
+
+    if(counts[item]==0) return;
+
+    div.innerHTML=`
+        <div class="name">${item}</div>
+        <div class="count">${counts[item]}</div>
+    `;
+
+}else{
+
+    div.innerHTML=`
         <div class="name">${item}</div>
 
         <div class="controls">
 
-        <button onclick="minus('${item}')">−</button>
+            <button onclick="minus('${item}')">−</button>
 
-        <div class="count">${counts[item]}</div>
+            <div class="count">${counts[item]}</div>
 
-        <button onclick="plus('${item}')">＋</button>
+            <button onclick="plus('${item}')">＋</button>
 
         </div>
-        `;
+    `;
+
+}
+    
 
         list.appendChild(div);
 
