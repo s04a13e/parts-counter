@@ -259,3 +259,192 @@ draw();
 
 </body>
 </html>
+</style>
+
+</head>
+
+<body>
+
+<h1>💎 パーツカウンター</h1>
+
+<div id="list"></div>
+
+<button class="bottomButton screenshotBtn" onclick="toggleScreenshot()">
+📸 スクショモード
+</button>
+
+<button class="bottomButton resetBtn" onclick="resetAll()">
+🗑️ リセット
+</button>
+
+<script>
+
+const items=[
+"10円",
+"20円",
+"30円",
+"40円",
+"60円",
+"80円",
+"120円",
+"180円",
+"250円",
+"300円",
+"500円",
+"700円",
+"900円",
+"1200円",
+"マンテル120",
+"マンテル180",
+"金具50",
+"金具80",
+"金具120"
+];
+
+let counts={};
+let screenshotMode=false;
+
+items.forEach(item=>{
+    counts[item]=0;
+});
+
+const list=document.getElementById("list");
+
+function draw(){
+
+    list.innerHTML="";
+
+    items.forEach(item=>{
+
+        if(screenshotMode && counts[item]===0){
+            return;
+        }
+
+        const div=document.createElement("div");
+
+        div.className=screenshotMode ? "item screenshot" : "item";
+                if(screenshotMode){
+
+            div.innerHTML=`
+                <div class="name">${item}</div>
+                <div class="count">${counts[item]}</div>
+            `;
+
+        }else{
+
+            div.innerHTML=`
+                <div class="name">${item}</div>
+
+                <div class="controls">
+
+                    <button onclick="minus('${item}')">−</button>
+
+                    <div class="count">${counts[item]}</div>
+
+                    <button onclick="plus('${item}')">＋</button>
+
+                </div>
+            `;
+
+        }
+
+        list.appendChild(div);
+
+    });
+
+}
+
+function plus(item){
+
+    counts[item]++;
+    save();
+    draw();
+
+}
+
+function minus(item){
+
+    if(counts[item]>0){
+
+        counts[item]--;
+        save();
+        draw();
+
+    }
+
+}
+
+function save(){
+
+    localStorage.setItem(
+        "partsCounter",
+        JSON.stringify(counts)
+    );
+
+}
+
+function load(){
+
+    const data=localStorage.getItem("partsCounter");
+
+    if(data){
+
+        counts=JSON.parse(data);
+
+    }
+
+}
+
+function resetAll(){
+
+    if(confirm("すべてリセットしますか？")){
+
+        items.forEach(item=>{
+            counts[item]=0;
+        });
+
+        save();
+        draw();
+
+    }
+
+}
+
+function toggleScreenshot(){
+
+    screenshotMode = !screenshotMode;
+
+    const btn=document.querySelector(".screenshotBtn");
+
+    if(screenshotMode){
+        btn.textContent="↩️ 通常モード";
+    }else{
+        btn.textContent="📸 スクショモード";
+    }
+
+    draw();
+
+}
+
+load();
+draw();
+
+let lastTouchEnd=0;
+
+document.addEventListener("touchend",function(event){
+
+    const now=Date.now();
+
+    if(now-lastTouchEnd<=300){
+        event.preventDefault();
+    }
+
+    lastTouchEnd=now;
+
+},{passive:false});
+
+</script>
+
+</body>
+
+</html>
