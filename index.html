@@ -93,13 +93,8 @@ button:active{
 </button>
 
 <button class="reset" onclick="resetAll()">
-    function toggleScreenshot(){
 
-    screenshotMode=!screenshotMode;
 
-    draw();
-
-}
 リセット
 </button>
     
@@ -236,6 +231,22 @@ function resetAll(){
         save();
 
         draw();
+
+    }
+
+}
+
+function toggleScreenshot(){
+
+    screenshotMode = !screenshotMode;
+
+    draw();
+
+}
+
+load();
+
+draw();
 
     }
 
